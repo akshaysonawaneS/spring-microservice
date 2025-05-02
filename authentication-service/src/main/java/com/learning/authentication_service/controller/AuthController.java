@@ -5,10 +5,13 @@ import com.learning.authentication_service.util.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Collections;
 
 @RestController
 public class AuthController {
@@ -20,13 +23,9 @@ public class AuthController {
 
     @PostMapping("/authenticate")
     public String generateToken(@RequestBody AuthRequest authRequest){
-        try {
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword())
-            );
-            return jwtUtil.generateToken(authRequest.getUsername());
-        }catch (Exception e){
-            throw  e;
-        }
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword())
+        );
+        return jwtUtil.generateToken(authRequest.getUsername());
     }
 }

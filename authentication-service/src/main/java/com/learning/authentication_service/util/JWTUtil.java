@@ -25,8 +25,10 @@ public class JWTUtil {
         System.out.println("Issued at: " + now);
         System.out.println("Expires at: " + expiryDate);
 
+        //TODO: get role from DB
         return Jwts.builder()
-                . setSubject(username)
+                .claim("role", "ROLE_ADMIN")
+                .setSubject(username)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(key, SignatureAlgorithm.HS256)
