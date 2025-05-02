@@ -1,5 +1,6 @@
 package com.learning.order_service.service;
 
+import com.learning.order_service.config.InventoryClient;
 import com.learning.order_service.dto.InventoryResponse;
 import com.learning.order_service.dto.OrderRequest;
 import com.learning.order_service.model.Order;
@@ -25,7 +26,10 @@ public class OrderService {
     @Autowired
     private WebClient.Builder webClientBuilder;
 
-    public void placeOrder(OrderRequest orderRequest){
+    @Autowired
+    private InventoryClient inventoryClient;
+
+    public void placeOrder(OrderRequest orderRequest) {
         Order order = new Order();
         order.setOrderNumber(UUID.randomUUID().toString());
         order.setOrderLineItemsList(orderRequest.getOrderLineItemsDtoList().stream().map(orderLineItemsDto -> {
@@ -40,10 +44,12 @@ public class OrderService {
                 .map(OrderLineItems::getSkuCode)
                 .toList();
 
-        InventoryResponse[] inventoryResponses = webClientBuilder.build().get().uri("http://inventory-service/api/inventory", uriBuilder -> uriBuilder.queryParam("skuCode", skuCodes).build())
-                        .retrieve()
-                        .bodyToMono(InventoryResponse[].class)
-                        .block();
+//        InventoryResponse[] inventoryResponses = webClientBuilder.build().get().uri("http://inventory-service/api/inventory", uriBuilder -> uriBuilder.queryParam("skuCode", skuCodes).build())
+//                .retrieve()
+//                .bodyToMono(InventoryResponse[].class)
+//                .block();
+
+        InventoryResponse[] inventoryResponses = inventoryClient.checkStock(skuCodes);
 
         boolean res = Arrays.stream(inventoryResponses).allMatch(InventoryResponse::getIsInStock);
 

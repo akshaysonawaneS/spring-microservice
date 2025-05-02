@@ -18,10 +18,6 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    @GetMapping("/test")
-    public String test(){
-        return "test";
-    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)

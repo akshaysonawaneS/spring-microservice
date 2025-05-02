@@ -1,11 +1,10 @@
 package com.example.inventory_service.model;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.web.service.annotation.GetExchange;
 
 @Entity
 @Table(name = "t_inventory")
